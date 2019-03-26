@@ -14,7 +14,6 @@ public class SearchSuggestion {
 	private String query;
 
 	public SearchSuggestion() {
-
 	}
 
 	public SearchSuggestion(Section sections, String query) {
@@ -27,7 +26,7 @@ public class SearchSuggestion {
 	}
 
 	public void setSections(Section sections) {
-		this.sections = sections;
+			this.sections = sections;
 	}
 
 	public String getQuery() {
@@ -40,6 +39,9 @@ public class SearchSuggestion {
 
 	@Override
 	public String toString() {
-		return "SearchSuggestion [sections=" + sections.toString() + ", query=" + query + "]";
+		if(this.sections != null)
+			return "SearchSuggestion [sections=" + sections.toString() + ", query=" + query + "]";
+		else
+			return "SearchSuggestion [sections=" + null + ", query=" + query + "]";
 	}
 }

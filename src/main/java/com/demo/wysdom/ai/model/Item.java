@@ -11,18 +11,15 @@ public class Item {
 	private String url;
 	@JacksonXmlProperty(localName = "Description")
 	private String des;
-	@JacksonXmlProperty(localName = "Image")
-	private String image;
 
 	public Item() {
 
 	}
 
-	public Item(String text, String url, String des, String image) {
+	public Item(String text, String url, String des) {
 		this.text = text;
 		this.url = url;
 		this.des = des;
-		this.image = image;
 	}
 
 	public String getText() {
@@ -49,17 +46,9 @@ public class Item {
 		this.des = des;
 	}
 
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
 	@Override
 	public String toString() {
-		return "Item [text=" + text + ", url=" + url + ", des=" + des + ", image=" + image + "]";
+		return "Item [text=" + text + ", url=" + url + ", des=" + des + "]";
 	}
 
 }
