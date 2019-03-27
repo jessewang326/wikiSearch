@@ -20,24 +20,29 @@ public class QueryController {
 	@Autowired
 	private ThreadPoolTaskExecutor taskExecutor;
 	
+	
 	@RequestMapping(value = "/topics", method = RequestMethod.GET)
 	public ModelAndView searchWiki(@RequestParam("key") List<String> keys) {
 		System.out.println("Input keys : " + keys);
 		List<SearchSuggestion> resultset = Collections.synchronizedList(new ArrayList<SearchSuggestion>());
-		CountDownLatch latch = new CountDownLatch(keys.size());
 		
+		//start multiple threads for querying
+		CountDownLatch latch = new CountDownLatch(keys.size());
 		for(String key : keys) {
 			System.out.println("processing key=" + key + ", pool size=" + taskExecutor.getPoolSize());
 			WikiRestAPI wikiRest = new WikiRestAPI(key, resultset, latch);
 			taskExecutor.execute(wikiRest);
 		}
 		
+		//wait until all the threads are completed
 		try {
 			System.out.println("wait for all threads to finish ");
 			latch.await();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		//send the resultset back
 		System.out.println("return size = " + resultset.size());
 		System.out.println("return : " + resultset);
 		ModelAndView model = new ModelAndView();

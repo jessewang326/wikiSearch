@@ -34,15 +34,34 @@ public class WikiRestAPI implements Runnable {
 		this.latch = latch;
 	}
 	
+	/**
+	 * search relative wiki page using keywords and wikipedia open api
+	 * @param keyword keyword for query
+	 * @param num 	  limit of returned result
+	 * @param latch   num of querying thread left in the same requests
+	 */
 	public void openSearch(String keyword, int num, CountDownLatch latch) {
+		
+		//normalize the keyword
 		String input = normalizeQuery(keyword);
+		
+		//run the query
 		String uri = REST_URL + SEARCH + input + "&limit=" + num;
 		RestTemplate restTemplate = new RestTemplate();
+		
+		//parse the result
 		resultset.add(parse(restTemplate.getForObject(uri, String.class)));
+		
+		//count down the latch to let the controller know this thread is completed
 		latch.countDown();
 		System.out.println("Search Done : key=" + key + " | latch=" + latch.getCount());
 	}
 	
+	/**
+	 * normalize the query keyword
+	 * @param query
+	 * @return
+	 */
 	public String normalizeQuery(String query) {
 		String convertedString = 
 				Normalizer.normalize(query, Normalizer.Form.NFD)
@@ -50,6 +69,12 @@ public class WikiRestAPI implements Runnable {
 		return convertedString;
 	}
 
+	
+	/**
+	 * parse the returned xml result into modle object
+	 * @param result
+	 * @return
+	 */
 	public SearchSuggestion parse(String result) {
 
 		SearchSuggestion xmlObj = null;
