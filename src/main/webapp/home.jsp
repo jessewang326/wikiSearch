@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <link href="webjars/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -19,6 +19,25 @@
 					Wiki Search: <input type="text" placeholder="China, US (use , to seperate keywords)" name="key" style="width:200px">  
 					<button class="btn" type="submit"> Search </button>
 				</form>
+			</div>
+		</div>
+		<br/>
+		<br/>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<c:if test="${not empty results}">
+					<c:forEach var="search" items="${results}" >
+						<c:out value="${search.getQuery()}"/>
+						<br/> 
+		    			<c:forEach var="item" items="${search.getSections().getItems()}" >
+		    				<c:out value="${item.getText()}"/>
+		    				<c:out value="->>"/>
+		    				<c:out value="${item.getUrl()}"/>
+		    				<br/> 
+		    			</c:forEach>
+		    			<br/> 
+					</c:forEach>
+				</c:if>
 			</div>
 		</div>
 	</div>

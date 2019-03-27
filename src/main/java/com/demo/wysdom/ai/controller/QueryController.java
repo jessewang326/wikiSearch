@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.demo.wysdom.ai.model.SearchSuggestion;
 
@@ -21,8 +21,7 @@ public class QueryController {
 	private ThreadPoolTaskExecutor taskExecutor;
 	
 	@RequestMapping(value = "/topics", method = RequestMethod.GET)
-	@ResponseBody
-	public List<SearchSuggestion> searchWiki(@RequestParam("key") List<String> keys) {
+	public ModelAndView searchWiki(@RequestParam("key") List<String> keys) {
 		System.out.println("Input keys : " + keys);
 		List<SearchSuggestion> resultset = Collections.synchronizedList(new ArrayList<SearchSuggestion>());
 		CountDownLatch latch = new CountDownLatch(keys.size());
@@ -41,7 +40,10 @@ public class QueryController {
 		}
 		System.out.println("return size = " + resultset.size());
 		System.out.println("return : " + resultset);
-		return resultset;
+		ModelAndView model = new ModelAndView();
+		model.setViewName("home");
+		model.addObject("results", resultset);
+		return model;
 	}
 
 }
